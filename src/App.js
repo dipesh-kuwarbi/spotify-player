@@ -1,48 +1,83 @@
 import React, { useState, useEffect } from "react";
-import { Box, Flex, Skeleton } from "@chakra-ui/react";
-import axios from "axios";
-import Player from "./components/Player";
-import Sidebar from "./components/Sidebar";
+import {
+  Flex,
+  Box,
+  Skeleton,
+  useBreakpointValue,
+  useDisclosure,
+} from "@chakra-ui/react";
 
-function App() {
-  const [songs, setSongs] = useState([]);
+import { useBackgroundGradient, useFetch, useToastNotification } from "./hooks";
+import Sidebar from "./components/Sidebar";
+import SongList from "./components/SongList";
+import Player from "./components/player/index";
+import {
+  MobileSongList,
+  MobileToggleButton,
+} from "./components/MobileComponent";
+
+const App = () => {
   const [currentSong, setCurrentSong] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { showToast } = useToastNotification();
+  const { data: songs, isLoading, error } = useFetch("items/songs");
+  const { backgroundGradient, hoverColor } = useBackgroundGradient(
+    currentSong ? currentSong.cover : null
+  );
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const isMobile = useBreakpointValue({ base: true, md: false });
 
   useEffect(() => {
-    // Fetch songs from API
-    axios
-      .get("https://cms.samespace.com/items/songs")
-      .then((response) => {
-        setSongs(response.data.data);
-        setCurrentSong(response.data.data[0]); // Set the first song as default
-        setIsLoading(false);
-      })
-      .catch((error) => console.error(error));
-  }, []);
+    if (songs?.length) {
+      setCurrentSong(songs[0]); // Set the first song as the default
+    }
+  }, [songs]);
 
-  console.log(songs, currentSong);
+  useEffect(() => {
+    if (error) {
+      showToast("Error fetching songs", error, "error");
+    }
+  }, [error, showToast]);
 
   return (
-    <Flex direction={{ base: "column", md: "row" }} height="100vh">
-      <Sidebar
-        songs={songs}
-        setCurrentSong={setCurrentSong}
-        isLoading={isLoading}
-      />
-      <Box
-        flex="1"
-        bgGradient={`linear(to-b, rgba(0,0,0,0.8), rgba(0,0,0,0.9))`}
-        transition="background 0.5s ease"
-      >
-        {currentSong ? (
-          <Player song={currentSong} />
-        ) : (
-          <Skeleton height="100%" />
-        )}
+    <Flex
+      direction={{ base: "column", md: "row" }}
+      height="100vh"
+      bgGradient={backgroundGradient}
+      transition="background 1s ease"
+      gap={{ md: "10px", lg: "3rem", xl: "6rem" }}
+      overflow="hidden"
+    >
+      <Sidebar />
+      {isMobile && (
+        <MobileToggleButton isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      )}
+      {isOpen && isMobile && (
+        <MobileSongList
+          songs={songs}
+          setCurrentSong={setCurrentSong}
+          isLoading={isLoading}
+          currentSong={currentSong}
+          hoverColor={hoverColor}
+          error={error}
+          backgroundGradient={backgroundGradient}
+        />
+      )}
+      {!isMobile && (
+        <SongList
+          songs={songs}
+          setCurrentSong={setCurrentSong}
+          isLoading={isLoading}
+          currentSong={currentSong}
+          backgroundGradient={backgroundGradient}
+          hoverColor={hoverColor}
+          error={error}
+        />
+      )}
+      <Box flex="1">
+        <Player song={currentSong} hoverColor={hoverColor} />
       </Box>
     </Flex>
   );
-}
+};
 
 export default App;
