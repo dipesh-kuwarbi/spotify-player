@@ -47,6 +47,7 @@ const SongList = () => {
     (index) => {
       const filtered =
         index === 1 ? songs.filter((song) => song.top_track) : songs;
+      setSearchTerm("");
       setFilteredSongs(filtered);
       setVisibleSongs(filtered.slice(0, 10)); // reset visible songs on tab change
     },
