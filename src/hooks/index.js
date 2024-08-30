@@ -22,7 +22,7 @@ export const useToastNotification = () => {
 };
 
 export const useFetch = (endpoint) => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -33,7 +33,6 @@ export const useFetch = (endpoint) => {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/${endpoint}`
         );
-        console.log("response", response);
 
         // Handle various status codes
         if (response.status >= 200 && response.status < 300) {

@@ -38,18 +38,25 @@ const SongCover = ({
   }
 
   return (
-    <Flex position="relative" justifyContent="center">
+    <Flex
+      position="relative"
+      justifyContent="center"
+      height={dimensions}
+      width={dimensions}
+    >
       {/* Animated Image with smooth transitions */}
       <MotionImage
         ref={imageRef}
-        boxSize={dimensions}
+        width="100%"
+        height="100%"
         borderRadius="md"
+        objectFit="cover"
         src={`https://cms.samespace.com/assets/${song?.cover}`}
         alt={song?.artist}
         opacity={isLoading ? 0 : 1}
         transition={{ opacity: { duration: 0.5 }, scale: { duration: 0.5 } }}
         initial={{ scale: 0.9 }}
-        animate={{ scale: isLoading || isImageLoading ? 0.9 : 1 }}
+        animate={{ scale: isLoading && isImageLoading ? 0.9 : 1 }}
         {...rest}
       />
     </Flex>

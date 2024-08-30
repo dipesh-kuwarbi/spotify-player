@@ -7,6 +7,7 @@ const SongInfo = ({ song, isMobile }) => (
     color="white"
     fontWeight="bold"
     textAlign="start"
+    mb="5"
   >
     {song?.artist}
   </Text>

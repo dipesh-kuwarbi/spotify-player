@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Box, Text, HStack } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import SongCover from "./common/SongCover";
-import SongItemSkeleton from "./skeletons/SongItemSkeleton";
+import SongCover from "../common/SongCover";
+import SongItemSkeleton from "../skeletons/SongItemSkeleton";
 
 const MotionHStack = motion(HStack);
 
@@ -13,6 +13,7 @@ const SongItem = ({
   setCurrentSong,
   hoverColor,
   isLoading,
+  currentSong,
 }) => {
   const [songDuration, setSongDuration] = useState("");
 
@@ -39,19 +40,22 @@ const SongItem = ({
   if (isLoading || error) {
     return <SongItemSkeleton />;
   }
-  console.log(id);
+
+  const isActive = id === currentSong?.id;
 
   return (
     <MotionHStack
       onClick={() => setCurrentSong(song)}
       padding="12px"
       cursor="pointer"
+      bgColor={isActive ? hoverColor : "transparent"}
+      borderRadius={isActive ? "8px" : ""}
       initial={{ opacity: 0, translateY: 10 }}
       animate={{ opacity: 1, translateY: 0 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
       alignItems="center"
       _hover={{ bgColor: hoverColor, borderRadius: "8px" }}
-      whileHover={{ scale: 1.03, bg: hoverColor }}
+      whileHover={{ scale: 1.03 }}
     >
       <SongCover
         song={song}
@@ -60,7 +64,7 @@ const SongItem = ({
         dimensions="50px"
       />
       <Box ml="3">
-        <Text color="white" fontWeight={400}>
+        <Text color="white" fontWeight={600}>
           {song.artist}
         </Text>
         <Text fontSize="sm" color="gray.400">
