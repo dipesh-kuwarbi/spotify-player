@@ -19,10 +19,10 @@ const App = () => {
       {isMobile && (
         <MobileToggleButton isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
       )}
-      {isOpen && isMobile && <MobileSongList />}
+      {isOpen && isMobile && <MobileSongList onClose={onClose} />}
       {!isMobile && <SongList />}
       <Box flex="1">
-        <Player />
+        <Player key="player" />
       </Box>
     </>
   );

@@ -14,6 +14,7 @@ const SongItem = ({
   hoverColor,
   isLoading,
   currentSong,
+  onClose,
 }) => {
   const [songDuration, setSongDuration] = useState("");
 
@@ -45,7 +46,10 @@ const SongItem = ({
 
   return (
     <MotionHStack
-      onClick={() => setCurrentSong(song)}
+      onClick={() => {
+        setCurrentSong(song);
+        onClose();
+      }}
       padding="12px"
       cursor="pointer"
       bgColor={isActive ? hoverColor : "transparent"}

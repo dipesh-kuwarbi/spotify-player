@@ -13,6 +13,7 @@ export const SongListContent = React.forwardRef(
       isLoading,
       setCurrentSong,
       hoverColor,
+      onClose,
     },
     ref
   ) => (
@@ -37,6 +38,7 @@ export const SongListContent = React.forwardRef(
                   error={error}
                   isLoading={isLoading}
                   setCurrentSong={setCurrentSong}
+                  onClose={onClose}
                   hoverColor={hoverColor}
                 />
               </motion.div>

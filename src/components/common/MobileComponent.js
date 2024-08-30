@@ -8,22 +8,24 @@ import { useSongContext } from "../../context/SongContext";
 
 const MotionBox = motion(Box);
 
-export const MobileToggleButton = ({ isOpen, onOpen, onClose }) => (
-  <Box position="fixed" top="4" right="1" zIndex="1">
-    <IconButtonComponent
-      icon={
-        isOpen ? <CloseIcon color="white" /> : <HamburgerIcon color="white" />
-      }
-      ariaLabel="Toggle Song List"
-      onClick={isOpen ? onClose : onOpen}
-      bgColor="transparent"
-      bg="transparent"
-      hoverColor="gray.600"
-    />
-  </Box>
-);
+export const MobileToggleButton = ({ isOpen, onOpen, onClose }) => {
+  return (
+    <Box position="fixed" top="4" right="1" zIndex="1">
+      <IconButtonComponent
+        icon={
+          isOpen ? <CloseIcon color="white" /> : <HamburgerIcon color="white" />
+        }
+        ariaLabel="Toggle Song List"
+        onClick={isOpen ? onClose : onOpen}
+        bgColor="transparent"
+        bg="transparent"
+        hoverColor="gray.600"
+      />
+    </Box>
+  );
+};
 
-export const MobileSongList = () => {
+export const MobileSongList = ({ onClose }) => {
   const { backgroundGradient } = useSongContext();
   return (
     <Fade in>
@@ -42,7 +44,7 @@ export const MobileSongList = () => {
         exit={{ x: "-100%" }} // Exit position: slide out to the left
         transition={{ duration: 0.5, ease: "easeInOut" }}
       >
-        <SongList />
+        <SongList onClose={onClose} />
       </MotionBox>
     </Fade>
   );

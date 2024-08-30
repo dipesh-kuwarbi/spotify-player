@@ -12,19 +12,19 @@ const Player = () => {
     hoverColor,
   } = useSongContext();
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const currentTimeRef = useRef(0);
+  const durationRef = useRef(0);
 
   const audioRef = useRef(null);
 
   // Handle the end of the song and automatically move to the next one
   useEffect(() => {
-    if (currentTime === Math.floor(duration)) {
-      setCurrentTime(0);
+    if (currentTimeRef.current === Math.floor(durationRef.current)) {
+      currentTimeRef.current = 0;
       setIsPlaying(false);
       onClick("next", song?.id);
     }
-  }, [currentTime, duration, onClick, song?.id]);
+  }, [currentTimeRef, durationRef, onClick, song?.id]);
 
   const togglePlayPause = () => {
     if (isPlaying) {
@@ -38,7 +38,7 @@ const Player = () => {
   const handleSliderChange = (value) => {
     if (audioRef.current) {
       audioRef.current.currentTime = value;
-      setCurrentTime(audioRef.current.currentTime);
+      currentTimeRef.current = audioRef.current.currentTime;
     }
   };
 
@@ -49,7 +49,7 @@ const Player = () => {
       currentValue.src = song?.url;
 
       const handleLoadedMetadata = () => {
-        setDuration(currentValue.duration);
+        durationRef.current = currentValue.duration;
         setIsPlaying(true);
         currentValue
           .play()
@@ -59,7 +59,7 @@ const Player = () => {
       };
 
       const handleTimeUpdate = () =>
-        setCurrentTime(Math.floor(currentValue.currentTime));
+        (currentTimeRef.current = Math.floor(currentValue.currentTime));
 
       currentValue.addEventListener("loadedmetadata", handleLoadedMetadata);
       currentValue.addEventListener("timeupdate", handleTimeUpdate);
@@ -94,8 +94,8 @@ const Player = () => {
 
       <PlayerControls
         audioRef={audioRef}
-        currentTime={currentTime}
-        duration={duration}
+        currentTime={currentTimeRef.current}
+        duration={durationRef.current}
         song={song}
         hoverColor={hoverColor}
         isPlaying={isPlaying}

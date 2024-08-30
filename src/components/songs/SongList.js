@@ -6,7 +6,7 @@ import SearchBar from "./SearchBar";
 import { SongListContent } from "./SongListContent";
 import { useSongContext } from "../../context/SongContext";
 
-const SongList = () => {
+const SongList = ({ onClose }) => {
   const {
     currentSong,
     songs = [],
@@ -75,6 +75,7 @@ const SongList = () => {
     >
       <SongTabs onTabChange={handleTabChange} />
       <SearchBar
+        key="searchBar"
         searchTerm={searchTerm}
         onSearch={handleSearch}
         hoverColor={hoverColor}
@@ -86,6 +87,7 @@ const SongList = () => {
         error={error}
         isLoading={isLoading}
         setCurrentSong={setCurrentSong}
+        onClose={onClose}
         hoverColor={hoverColor}
         ref={ref}
       />
