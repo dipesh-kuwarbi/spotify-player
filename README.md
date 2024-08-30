@@ -27,8 +27,6 @@ This Music Player application allows users to browse, play, and control songs. I
 
 ### Prerequisites
 
-### Prerequisites
-
 Ensure you have the following installed:
 
 - **Node.js** (version 14.x or later)
