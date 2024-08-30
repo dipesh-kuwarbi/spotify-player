@@ -44,13 +44,14 @@ const Player = () => {
 
   // Handle song change and ensure it plays automatically
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.src = song?.url;
+    const currentValue = audioRef.current;
+    if (currentValue) {
+      currentValue.src = song?.url;
 
       const handleLoadedMetadata = () => {
-        setDuration(audioRef.current.duration);
+        setDuration(currentValue.duration);
         setIsPlaying(true);
-        audioRef?.current
+        currentValue
           .play()
           .then()
           .catch((err) => setIsPlaying(false));
@@ -58,17 +59,17 @@ const Player = () => {
       };
 
       const handleTimeUpdate = () =>
-        setCurrentTime(Math.floor(audioRef.current.currentTime));
+        setCurrentTime(Math.floor(currentValue.currentTime));
 
-      audioRef.current.addEventListener("loadedmetadata", handleLoadedMetadata);
-      audioRef.current.addEventListener("timeupdate", handleTimeUpdate);
+      currentValue.addEventListener("loadedmetadata", handleLoadedMetadata);
+      currentValue.addEventListener("timeupdate", handleTimeUpdate);
 
       return () => {
-        audioRef.current.removeEventListener(
+        currentValue.removeEventListener(
           "loadedmetadata",
           handleLoadedMetadata
         );
-        audioRef.current.removeEventListener("timeupdate", handleTimeUpdate);
+        currentValue.removeEventListener("timeupdate", handleTimeUpdate);
       };
     }
   }, [song?.url]);

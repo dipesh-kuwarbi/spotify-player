@@ -62,6 +62,7 @@ const SongItem = ({
         isLoading={isLoading}
         hoverColor="gray.700"
         dimensions="50px"
+        isList
       />
       <Box ml="3">
         <Text color="white" fontWeight={600}>

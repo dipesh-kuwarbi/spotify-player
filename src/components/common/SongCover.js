@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, memo } from "react";
 import { Image, Flex, Skeleton } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 
@@ -21,7 +21,7 @@ const SongCover = ({
         setIsImageLoading(false);
       };
     }
-  }, [song?.cover, imageRef, imageRef.current]);
+  }, [song?.cover, imageRef]);
 
   /* Skeleton loader when the image is loading */
 
@@ -49,7 +49,7 @@ const SongCover = ({
         ref={imageRef}
         width="100%"
         height="100%"
-        borderRadius="md"
+        borderRadius={rest.isList ? "100%" : "md"}
         objectFit="cover"
         src={`https://cms.samespace.com/assets/${song?.cover}`}
         alt={song?.artist}
@@ -57,10 +57,12 @@ const SongCover = ({
         transition={{ opacity: { duration: 0.5 }, scale: { duration: 0.5 } }}
         initial={{ scale: 0.9 }}
         animate={{ scale: isLoading && isImageLoading ? 0.9 : 1 }}
+        sizes="(max-width: 480px) 480px, (max-width: 768px) 768px, 1200px"
+        loading="lazy"
         {...rest}
       />
     </Flex>
   );
 };
 
-export default SongCover;
+export default memo(SongCover);
