@@ -37,8 +37,10 @@ const SongList = ({ onClose }) => {
     }
     console.debug(filteredSongs);
 
-    const filtered = filteredSongs.filter((song) =>
-      song.artist.toLowerCase().includes(term.toLowerCase())
+    const filtered = filteredSongs.filter(
+      (song) =>
+        song.artist.toLowerCase().includes(term.toLowerCase()) ||
+        song.name.toLowerCase().includes(term.toLowerCase())
     );
 
     setFilteredSongs(filtered);
