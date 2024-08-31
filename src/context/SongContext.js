@@ -10,7 +10,7 @@ import {
   useFetch,
   useToastNotification,
 } from "../hooks";
-import { Flex } from "@chakra-ui/react";
+import { Flex, Spinner } from "@chakra-ui/react";
 
 const SongContext = createContext();
 
@@ -61,6 +61,20 @@ export const SongProvider = ({ children }) => {
     [isDebounced, songs]
   );
 
+  if (!currentSong) {
+    return (
+      <Flex
+        direction="column"
+        align="center"
+        justify="center"
+        h="100vh"
+        bgGradient="linear(to-br, black, gray.600)"
+      >
+        <Spinner size="xl" color="white" />
+      </Flex>
+    );
+  }
+
   return (
     <SongContext.Provider
       value={{
@@ -80,8 +94,11 @@ export const SongProvider = ({ children }) => {
       <Flex
         direction={{ base: "column", md: "row" }}
         height="100vh"
-        bgGradient={backgroundGradient}
-        transition="background 1s ease"
+        bgGradient={
+          backgroundGradient
+            ? backgroundGradient
+            : `linear(to-l, ${currentSong.accent}, ${"rgba(0, 0, 0, 0.60)"})`
+        }
         gap={{ md: "10px", lg: "3rem", xl: "6rem" }}
         overflow="hidden"
       >

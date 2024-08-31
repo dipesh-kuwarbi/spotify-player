@@ -68,9 +68,7 @@ export const useFetch = (endpoint) => {
 };
 
 export const useBackgroundGradient = (coverImageId) => {
-  const [backgroundGradient, setBackgroundGradient] = useState(
-    "linear-gradient(to-b, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9))"
-  );
+  const [backgroundGradient, setBackgroundGradient] = useState(null);
   const [hoverColor, setHoverColor] = useState("rgba(255, 255, 255, 0.2)"); // Default hover color
 
   useEffect(() => {
@@ -83,20 +81,13 @@ export const useBackgroundGradient = (coverImageId) => {
         .then((color) => {
           const darkerShade = tinycolor(color.rgba).darken(10).toRgbString(); // Darken by 10%
           setBackgroundGradient(
-            `linear-gradient(to-b, ${color.rgba}, rgba(0, 0, 0, 0.9))`
+            `linear-gradient(to-r, ${color.rgba}, rgba(0, 0, 0, 0.9))`
           );
           setHoverColor(darkerShade); // Set hover color
         })
         .catch((e) => {
           console.error(e);
-          setBackgroundGradient(
-            "linear-gradient(to-b, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9))"
-          ); // Fallback gradient
         });
-    } else {
-      setBackgroundGradient(
-        "linear-gradient(to-b, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9))"
-      );
     }
   }, [coverImageId]);
 
