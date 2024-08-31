@@ -58,24 +58,24 @@ const Player = () => {
       if (isFirstRender.current) {
         isFirstRender.current = false; // Set to false after the first render
       } else {
-        // Perform actions if it's not the first render
-        audio.src = song?.url;
-
         const savedTime = sessionStorage.getItem(
           `song-${song?.id}-currentTime`
         );
-        if (savedTime) {
+        if (savedTime && !isPlaying && !isTakingInput) {
+          setIsPlaying(true);
           audio.currentTime = parseFloat(savedTime);
           setCurrentTime(parseFloat(savedTime));
         }
 
         const handleLoadedMetadata = () => {
           setDuration(audio.duration);
-          setIsPlaying(true);
-          audio
-            .play()
-            .then()
-            .catch(() => setIsPlaying(false));
+          if (!isTakingInput && isPlaying) {
+            setIsPlaying(true);
+            audio
+              .play()
+              .then()
+              .catch(() => setIsPlaying(false));
+          }
         };
 
         const handleTimeUpdate = () => {
@@ -136,7 +136,7 @@ const Player = () => {
         onClick={onClick}
         toggleMute={toggleMute}
       />
-      <audio ref={audioRef} autoPlay={true} muted={false} />
+      <audio ref={audioRef} src={song?.url} autoPlay={true} muted={false} />
     </Flex>
   );
 };
