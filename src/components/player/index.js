@@ -62,7 +62,6 @@ const Player = () => {
           `song-${song?.id}-currentTime`
         );
         if (savedTime && !isPlaying && !isTakingInput) {
-          setIsPlaying(true);
           audio.currentTime = parseFloat(savedTime);
           setCurrentTime(parseFloat(savedTime));
         }
@@ -136,7 +135,7 @@ const Player = () => {
         onClick={onClick}
         toggleMute={toggleMute}
       />
-      <audio ref={audioRef} src={song?.url} autoPlay={true} muted={false} />
+      <audio ref={audioRef} src={song?.url} autoPlay={false} muted={false} />
     </Flex>
   );
 };
