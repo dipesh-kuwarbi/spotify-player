@@ -1,16 +1,20 @@
 import React from "react";
-import { Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 
 const SongInfo = ({ song, isMobile }) => (
-  <Text
-    fontSize={isMobile ? "xl" : "3xl"}
-    color="white"
-    fontWeight="bold"
-    textAlign="start"
-    mb="5"
-  >
-    {song?.artist}
-  </Text>
+  <Box>
+    <Text
+      color="white"
+      fontWeight={600}
+      fontSize={isMobile ? "xl" : "3xl"}
+      textAlign="start"
+    >
+      {song.name}
+    </Text>
+    <Text fontSize="md" color="gray.400" mb="2">
+      {song.artist}
+    </Text>
+  </Box>
 );
 
 export default SongInfo;

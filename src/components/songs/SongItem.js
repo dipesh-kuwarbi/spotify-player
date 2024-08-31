@@ -70,10 +70,10 @@ const SongItem = ({
       />
       <Box ml="3">
         <Text color="white" fontWeight={600}>
-          {song.artist}
+          {song.name}
         </Text>
         <Text fontSize="sm" color="gray.400">
-          {song.title}
+          {song.artist}
         </Text>
       </Box>
       <Text ml="auto" color="gray.300">
