@@ -64,9 +64,11 @@ const Player = () => {
 
       const handleLoadedMetadata = () => {
         setDuration(audio.duration);
-        if (isPlaying) {
-          audio.play().catch(() => setIsPlaying(false));
-        }
+        setIsPlaying(true);
+        audio
+          .play()
+          .then()
+          .catch(() => setIsPlaying(false));
       };
 
       const handleTimeUpdate = () => {
@@ -88,7 +90,7 @@ const Player = () => {
         audio.removeEventListener("timeupdate", handleTimeUpdate);
       };
     }
-  }, [song?.url, isTakingInput, isPlaying]);
+  }, [song?.url]);
 
   const toggleMute = () => {
     const audio = audioRef.current;

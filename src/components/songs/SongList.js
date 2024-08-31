@@ -35,8 +35,9 @@ const SongList = ({ onClose }) => {
       setVisibleSongs(songs.slice(0, 10)); // Show the first 10 songs
       return;
     }
+    console.debug(filteredSongs);
 
-    const filtered = songs.filter((song) =>
+    const filtered = filteredSongs.filter((song) =>
       song.artist.toLowerCase().includes(term.toLowerCase())
     );
 
