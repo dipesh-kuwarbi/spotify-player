@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { FastAverageColor } from "fast-average-color";
@@ -101,4 +101,19 @@ export const useBackgroundGradient = (coverImageId) => {
   }, [coverImageId]);
 
   return { backgroundGradient, hoverColor };
+};
+
+export const useDebounce = (callback, delay) => {
+  const timeoutRef = useRef(null);
+
+  const debouncedCallback = (...args) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      callback(...args);
+    }, delay);
+  };
+
+  return debouncedCallback;
 };

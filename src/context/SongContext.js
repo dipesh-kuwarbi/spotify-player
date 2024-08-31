@@ -16,6 +16,7 @@ const SongContext = createContext();
 
 export const SongProvider = ({ children }) => {
   const [currentSong, setCurrentSong] = useState(null);
+  const [isTakingInput, setIsTakingInput] = useState(false);
   const [isDebounced, setIsDebounced] = useState(false);
   const { data: songs = [], isLoading, error } = useFetch("items/songs");
   const { backgroundGradient, hoverColor } = useBackgroundGradient(
@@ -50,6 +51,8 @@ export const SongProvider = ({ children }) => {
 
       setCurrentSong(songs[newIndex]);
       setIsDebounced(true);
+      setIsTakingInput(false);
+      sessionStorage.removeItem(`song-${songId}-currentTime`);
 
       setTimeout(() => {
         setIsDebounced(false);
@@ -63,8 +66,10 @@ export const SongProvider = ({ children }) => {
       value={{
         currentSong,
         setCurrentSong,
+        setIsTakingInput,
         handleSongChange,
         isDebounced,
+        isTakingInput,
         songs,
         backgroundGradient,
         hoverColor,

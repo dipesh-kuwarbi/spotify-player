@@ -10,12 +10,14 @@ import { motion } from "framer-motion";
 
 const MotionInput = motion(Input);
 
-const SearchBar = ({ searchTerm, onSearch, hoverColor }) => (
+const SearchBar = ({ searchTerm, onSearch, hoverColor, onBlur, onFocus }) => (
   <InputGroup mb="4">
     <MotionInput
       placeholder="Search Song, Artist"
       value={searchTerm}
       onChange={onSearch}
+      onBlur={onBlur}
+      onFocus={onFocus}
       bg={hoverColor}
       color="white"
       sx={{
