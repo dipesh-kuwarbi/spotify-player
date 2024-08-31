@@ -9,9 +9,9 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { IconButtonComponent } from "../common/IconButtonComponent";
-import { ArrowIcon, PauseIcon, ThreeDotIcon } from "../../icons";
+import { ArrowIcon, PauseIcon, SoundIcon, ThreeDotIcon } from "../../icons";
 import { FaPlay } from "react-icons/fa";
-import VolumeControl from "./VolumeControl";
+import { IoVolumeMuteSharp } from "react-icons/io5";
 
 const formatTime = (seconds) => {
   const minutes = Math.floor(seconds / 60);
@@ -26,7 +26,8 @@ const PlayerControls = ({
   isPlaying,
   togglePlayPause,
   handleSliderChange,
-  audioRef,
+  isMuted,
+  toggleMute,
   song,
   onClick,
 }) => (
@@ -109,7 +110,19 @@ const PlayerControls = ({
         />
       </Flex>
 
-      <VolumeControl audioRef={audioRef} hoverColor={hoverColor} />
+      <IconButtonComponent
+        icon={
+          isMuted ? (
+            <IoVolumeMuteSharp color="white" />
+          ) : (
+            <SoundIcon color="white" />
+          )
+        }
+        aria-label={isMuted ? "Unmute" : "Mute"}
+        bgColor="gray.700"
+        onClick={toggleMute}
+        hoverColor={hoverColor}
+      />
     </Flex>
   </>
 );

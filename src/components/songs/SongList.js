@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Box } from "@chakra-ui/react";
 import { useInView } from "react-intersection-observer";
 import SongTabs from "./SongTab";
@@ -16,28 +16,44 @@ const SongList = ({ onClose }) => {
     hoverColor,
     setIsTakingInput,
   } = useSongContext();
-
   const [searchTerm, setSearchTerm] = useState("");
+  const [filteredSongs, setFilteredSongs] = useState([]);
   const [visibleSongs, setVisibleSongs] = useState([]);
   const [ref, inView] = useInView();
 
-  // Memoize filteredSongs to avoid recalculations on every render
-  const filteredSongs = useMemo(() => {
-    if (searchTerm.trim() === "") {
-      return songs;
-    }
-    return songs.filter((song) =>
-      song.artist.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [searchTerm, songs]);
+  useEffect(() => {
+    setFilteredSongs(songs);
+  }, [songs]);
 
   const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
+    const term = e.target.value;
+    setSearchTerm(term);
+
+    if (term.trim() === "") {
+      // Reset filtered songs if search term is empty
+      setFilteredSongs(songs);
+      setVisibleSongs(songs.slice(0, 10)); // Show the first 10 songs
+      return;
+    }
+
+    const filtered = songs.filter((song) =>
+      song.artist.toLowerCase().includes(term.toLowerCase())
+    );
+
+    setFilteredSongs(filtered);
+    setVisibleSongs(filtered.slice(0, 10)); // Reset visible songs on search
   };
 
-  useEffect(() => {
-    setVisibleSongs(filteredSongs.slice(0, 10));
-  }, [filteredSongs]);
+  const handleTabChange = useCallback(
+    (index) => {
+      const filtered =
+        index === 1 ? songs.filter((song) => song.top_track) : songs;
+      setSearchTerm("");
+      setFilteredSongs(filtered);
+      setVisibleSongs(filtered.slice(0, 10)); // reset visible songs on tab change
+    },
+    [songs]
+  );
 
   useEffect(() => {
     if (inView && visibleSongs.length < filteredSongs.length) {
@@ -48,16 +64,6 @@ const SongList = ({ onClose }) => {
       setVisibleSongs((prev) => [...prev, ...nextBatch]);
     }
   }, [inView, filteredSongs, visibleSongs]);
-
-  const handleTabChange = useCallback(
-    (index) => {
-      const newFilteredSongs =
-        index === 1 ? songs.filter((song) => song.top_track) : songs;
-      setSearchTerm("");
-      setVisibleSongs(newFilteredSongs.slice(0, 10)); // reset visible songs on tab change
-    },
-    [songs]
-  );
 
   const handleInputFocus = () => {
     setIsTakingInput(true);
