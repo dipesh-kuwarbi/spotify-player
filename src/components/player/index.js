@@ -19,6 +19,7 @@ const Player = () => {
   const [duration, setDuration] = useState(0);
 
   const audioRef = useRef(null);
+  const isFirstRender = useRef(true);
 
   // Handle the end of the song and automatically move to the next one
   useEffect(() => {
@@ -53,44 +54,51 @@ const Player = () => {
   useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
-      audio.src = song?.url;
+      // Check if it's the first render
+      if (isFirstRender.current) {
+        isFirstRender.current = false; // Set to false after the first render
+      } else {
+        // Perform actions if it's not the first render
+        audio.src = song?.url;
 
-      const savedTime = sessionStorage.getItem(`song-${song?.id}-currentTime`);
-      if (savedTime) {
-        audio.currentTime = parseFloat(savedTime);
-        audio.pause();
-        setCurrentTime(parseFloat(savedTime));
-      }
-
-      const handleLoadedMetadata = () => {
-        setDuration(audio.duration);
-        setIsPlaying(true);
-        audio
-          .play()
-          .then()
-          .catch(() => setIsPlaying(false));
-      };
-
-      const handleTimeUpdate = () => {
-        if (!isTakingInput) {
-          setCurrentTime(audio.currentTime);
-          if (audio.currentTime != audio.duration)
-            sessionStorage.setItem(
-              `song-${song?.id}-currentTime`,
-              audio.currentTime
-            );
+        const savedTime = sessionStorage.getItem(
+          `song-${song?.id}-currentTime`
+        );
+        if (savedTime) {
+          audio.currentTime = parseFloat(savedTime);
+          setCurrentTime(parseFloat(savedTime));
         }
-      };
 
-      audio.addEventListener("loadedmetadata", handleLoadedMetadata);
-      audio.addEventListener("timeupdate", handleTimeUpdate);
+        const handleLoadedMetadata = () => {
+          setDuration(audio.duration);
+          setIsPlaying(true);
+          audio
+            .play()
+            .then()
+            .catch(() => setIsPlaying(false));
+        };
 
-      return () => {
-        audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
-        audio.removeEventListener("timeupdate", handleTimeUpdate);
-      };
+        const handleTimeUpdate = () => {
+          if (!isTakingInput) {
+            setCurrentTime(audio.currentTime);
+            if (audio.currentTime != audio.duration)
+              sessionStorage.setItem(
+                `song-${song?.id}-currentTime`,
+                audio.currentTime
+              );
+          }
+        };
+
+        audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+        audio.addEventListener("timeupdate", handleTimeUpdate);
+
+        return () => {
+          audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+          audio.removeEventListener("timeupdate", handleTimeUpdate);
+        };
+      }
     }
-  }, [song?.url]);
+  }, [song?.url, isTakingInput]);
 
   const toggleMute = () => {
     const audio = audioRef.current;
