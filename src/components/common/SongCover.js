@@ -37,12 +37,7 @@ const SongCover = ({
   }
 
   return (
-    <Flex
-      position="relative"
-      justifyContent="center"
-      height={dimensions}
-      width={dimensions}
-    >
+    <Flex justifyContent="center" height={dimensions} width={dimensions}>
       {/* Animated Image with smooth transitions */}
       <MotionImage
         ref={imageRef}
