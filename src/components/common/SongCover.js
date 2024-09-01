@@ -12,19 +12,18 @@ const SongCover = ({
   ...rest
 }) => {
   const imageRef = useRef(null);
-  const [isImageLoading, setIsImageLoading] = useState();
+  const [isImageLoading, setIsImageLoading] = useState(true);
 
   useEffect(() => {
-    setIsImageLoading(true);
-    if (imageRef.current) {
+    if (imageRef.current && song?.cover) {
       imageRef.current.onload = () => {
         setIsImageLoading(false);
       };
+      imageRef.current.src = `https://cms.samespace.com/assets/${song?.cover}`; // Preload image
     }
-  }, [song?.cover, imageRef]);
+  }, [song?.cover]);
 
   /* Skeleton loader when the image is loading */
-
   if (isLoading && isImageLoading) {
     return (
       <Skeleton
@@ -57,8 +56,11 @@ const SongCover = ({
         transition={{ opacity: { duration: 0.5 }, scale: { duration: 0.5 } }}
         initial={{ scale: 0.9 }}
         animate={{ scale: isLoading && isImageLoading ? 0.9 : 1 }}
-        sizes="(max-width: 480px) 480px, (max-width: 768px) 768px, 1200px"
+        sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 25vw"
         loading="lazy"
+        srcSet={`https://cms.samespace.com/assets/${song?.cover}?w=480 480w,
+                https://cms.samespace.com/assets/${song?.cover}?w=768 768w,
+                https://cms.samespace.com/assets/${song?.cover}?w=1200 1200w`}
         {...rest}
       />
     </Flex>
